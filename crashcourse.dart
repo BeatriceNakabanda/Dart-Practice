@@ -143,3 +143,63 @@ class Post{
   
   Post(this.title, this.userId);
 }
+
+//generic
+void main(){
+  var noodles = MenuItem("Veg noodles", 9.9);
+  var pizza = MenuItem("Chicken pizza", 10.5);
+  var iceCream = IceCream(["Cockie", "Brownie", "Cashewnuts"], "Vanila Icecream", 2.6);
+  var foods = Collection<MenuItem>(
+    'Menu Items',
+    [noodles, pizza, iceCream]
+  );
+  var random = foods.randomItem();
+  print(random);
+}
+
+//dynamic shows it doesn't know what type of data will be =stired in that list
+// we make a class generic becuase we want dart not to have it dynamic but dart to know which type we are dealing with <T>
+class Collection<T> {
+  String name;
+  List<T> data; // the data type will be whatever was passed in when we instatiated the class
+  
+  Collection(this.name, this.data);
+  
+  T randomItem(){
+    data.shuffle();
+    
+    return data[0]; //its dynamic because it doesnt know what kind of data that is going to be returned
+  }
+  
+}
+class MenuItem{
+  String title;
+  double price;
+  
+  MenuItem(this.title, this.price);
+  
+  String format(){
+    return "$title --> $price";
+  }
+  //overide generic dart methods
+  String toString(){
+    return format();
+  }
+}
+
+class IceCream extends MenuItem{
+  List<String> toppings;
+  //setting constructor for new class =>passing the new values of title and price into the parent constructor
+//   IceCream(this.flavors, String title, double price): super(title, price);
+  IceCream(this.toppings, super.title, super.price);
+  
+  //method overrriding...these are methods from the parent class
+  @override
+  String format(){
+    var formattedToppings = "Contains:";
+    for(final t in toppings){
+      formattedToppings = '$formattedToppings $t';
+    }
+    return "$title -> $price \n $formattedToppings";
+  }
+}
