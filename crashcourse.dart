@@ -116,3 +116,30 @@ class Post{
   
   Post(this.title, this.userId);
 }
+//Fetching data
+import 'dart:convert' as convert; //returns json-formated  response
+import 'package:http/http.dart' as http;
+
+void main() async{
+  final post = await fetchPost();
+  print(post.userId);
+  print(post.title);
+}
+
+//we can also use async and await to achieve the above
+
+Future<Post> fetchPost() async{
+  var url = Uri.https('jsonplaceholder.typicode.com', '/todos/1');
+  final response = await http.get(url);
+  //convert json response body into map
+  //dynamic means any type is accepted whether int or string, etc
+  Map<String, dynamic> data = convert.jsonDecode(response.body);
+  return Post(data["title"], data["userId"]);
+}
+
+class Post{
+  String title;
+  int userId;
+  
+  Post(this.title, this.userId);
+}
